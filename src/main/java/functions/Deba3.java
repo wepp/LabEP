@@ -1,7 +1,5 @@
 package functions;
 
-import interfaces.IFunction;
-
 import java.util.ArrayList;
 
 public class Deba3 implements IFunction {

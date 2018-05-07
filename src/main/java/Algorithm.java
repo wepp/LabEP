@@ -1,9 +1,8 @@
-import interfaces.IFunction;
+import functions.IFunction;
 
 import java.util.Map.Entry;
 
 import java.util.*;
-import java.util.stream.DoubleStream;
 
 public class Algorithm {
 
@@ -100,20 +99,20 @@ public class Algorithm {
         this.dimension = dimension;
     }
 
-    public void generateRandomPopulation(){
-        for (int i =0; i<N; i++){
+    public void generateRandomPopulation() {
+        for (int i = 0; i < N; i++) {
             population.put(i, new Individual(dimension, function));
         }
     }
 
-    public ArrayList<Entry<Integer, Individual>> getSelectionGroup(HashMap<Integer, Individual> population){
+    public ArrayList<Entry<Integer, Individual>> getSelectionGroup(HashMap<Integer, Individual> population) {
         Random rg = new Random();
         int realCs = (int) (cs * N);
         ArrayList<Entry<Integer, Individual>> retList = new ArrayList<Entry<Integer, Individual>>();
         List<Integer> keys = new ArrayList<Integer>(population.keySet());
 
-        for (int i=0; i<realCs; i++){
-            final int key = keys.get( rg.nextInt(keys.size()) );
+        for (int i = 0; i < realCs; i++) {
+            final int key = keys.get(rg.nextInt(keys.size()));
             final Individual ind = population.get(key);
             Entry<Integer, Individual> entryInd = new Entry<Integer, Individual>() {
                 public Integer getKey() {
@@ -134,16 +133,16 @@ public class Algorithm {
         return retList;
     }
 
-    public ArrayList<HashMap<Integer, Individual>> getFactorGroups(HashMap<Integer, Individual> population){
+    public ArrayList<HashMap<Integer, Individual>> getFactorGroups(HashMap<Integer, Individual> population) {
         Random rg = new Random();
         int realS = (int) (s * N);
         ArrayList<HashMap<Integer, Individual>> retList = new ArrayList<HashMap<Integer, Individual>>();
         List<Integer> keys = new ArrayList<Integer>(population.keySet());
 
-        for (int i = 0; i<cf; i++){
+        for (int i = 0; i < cf; i++) {
             HashMap<Integer, Individual> tempMap = new HashMap<Integer, Individual>();
-            for (int j=0; j<realS; j++){
-                int key = keys.get( rg.nextInt(keys.size()) );
+            for (int j = 0; j < realS; j++) {
+                int key = keys.get(rg.nextInt(keys.size()));
                 Individual ind = population.get(key);
                 tempMap.put(key, ind);
             }
@@ -153,9 +152,9 @@ public class Algorithm {
         return retList;
     }
 
-    public HashMap<Integer, Individual> getSelectionPool(Individual individual, ArrayList<HashMap<Integer, Individual>> factorGroups){
+    public HashMap<Integer, Individual> getSelectionPool(Individual individual, ArrayList<HashMap<Integer, Individual>> factorGroups) {
         HashMap<Integer, Individual> retMap = new HashMap<Integer, Individual>();
-        for (HashMap<Integer, Individual> group:factorGroups) {
+        for (HashMap<Integer, Individual> group : factorGroups) {
 
             Entry<Integer, Individual> mostSimilarEntry = getMostSimilarIndividual(individual,
                     new ArrayList<Entry<Integer, Individual>>(group.entrySet()));
@@ -168,9 +167,9 @@ public class Algorithm {
         return retMap;
     }
 
-    public HashMap<Integer, Individual> getSelectionPool2(ArrayList<HashMap<Integer, Individual>> factorGroups){
+    public HashMap<Integer, Individual> getSelectionPool2(ArrayList<HashMap<Integer, Individual>> factorGroups) {
         HashMap<Integer, Individual> retMap = new HashMap<Integer, Individual>();
-        for (HashMap<Integer, Individual> group:factorGroups) {
+        for (HashMap<Integer, Individual> group : factorGroups) {
 
 //            Entry<Integer, Individual> mostSimilarEntry = getMostSimilarIndividual(individual,
 //                    new ArrayList<Entry<Integer, Individual>>(group.entrySet()));
@@ -184,12 +183,12 @@ public class Algorithm {
         return retMap;
     }
 
-    public Entry<Integer, Individual> getIndWithWorstFitness(HashMap<Integer, Individual> individualHashMap){
+    public Entry<Integer, Individual> getIndWithWorstFitness(HashMap<Integer, Individual> individualHashMap) {
         Set<Entry<Integer, Individual>> entries = individualHashMap.entrySet();
         Entry<Integer, Individual> retEntry = (Entry<Integer, Individual>) entries.toArray()[0];
 
         for (Entry<Integer, Individual> entry : entries) {
-            if(entry.getValue().getFitness() < retEntry.getValue().getFitness()){
+            if (entry.getValue().getFitness() < retEntry.getValue().getFitness()) {
                 retEntry = entry;
             }
         }
@@ -197,7 +196,7 @@ public class Algorithm {
         return retEntry;
     }
 
-    public Entry<Integer, Individual> getRandomFirstParent(HashMap<Integer, Individual> population){
+    public Entry<Integer, Individual> getRandomFirstParent(HashMap<Integer, Individual> population) {
         Random rg = new Random();
         ArrayList<Integer> keys = new ArrayList<Integer>(population.keySet());
         final int randomKey = keys.get(rg.nextInt(keys.size()));
@@ -218,12 +217,12 @@ public class Algorithm {
         };
     }
 
-    public Entry<Integer, Individual> getMostSimilarIndividual(Individual individual, ArrayList<Entry<Integer, Individual>> individuals){
+    public Entry<Integer, Individual> getMostSimilarIndividual(Individual individual, ArrayList<Entry<Integer, Individual>> individuals) {
         Entry<Integer, Individual> retEntry = individuals.get(0);
         double euclidean = euclideanDistance(individual, individuals.get(0).getValue());
-        for (int i = 1; i<individuals.size(); i++){
+        for (int i = 1; i < individuals.size(); i++) {
             double temp = euclideanDistance(individual, individuals.get(i).getValue());
-            if(temp > euclidean) {
+            if (temp > euclidean) {
                 euclidean = temp;
                 retEntry = individuals.get(i);
             }
@@ -232,42 +231,36 @@ public class Algorithm {
         return retEntry;
     }
 
-    private double euclideanDistance(Individual ind1, Individual ind2){
-
+    private double euclideanDistance(Individual ind1, Individual ind2) {
         double sum = 0;
-
-        for(int i=0; i<dimension; i++){
+        for (int i = 0; i < dimension; i++) {
             double temp = ind1.getPhenotype().get(i) - ind2.getPhenotype().get(i);
-            sum += temp*temp;
+            sum += temp * temp;
         }
-
         return Math.pow(sum, 0.5);
     }
 
-    private double euclideanDistance(ArrayList<Double> arr1, ArrayList<Double> arr2){
-
+    private double euclideanDistance(ArrayList<Double> arr1, ArrayList<Double> arr2) {
         double sum = 0;
-
-        for(int i=0; i<dimension; i++){
+        for (int i = 0; i < dimension; i++) {
             double temp = arr1.get(i) - arr2.get(i);
-            sum += temp*temp;
+            sum += temp * temp;
         }
-
         return Math.pow(sum, 0.5);
     }
 
-    public ArrayList<Entry<Integer, Individual>> cross(final ArrayList<Entry<Integer, Individual>> pair){
+    public ArrayList<Entry<Integer, Individual>> cross(final ArrayList<Entry<Integer, Individual>> pair) {
 
         int m = M;
         Random rg = new Random();
-        int n = rg.nextInt(m*dimension);
+        int n = rg.nextInt(m * dimension);
 
         ArrayList<Entry<Integer, Individual>> retPair = new ArrayList<Entry<Integer, Individual>>();
 
         String longString1 = "";
         String longString2 = "";
 
-        for(int i=0; i<dimension; i++){
+        for (int i = 0; i < dimension; i++) {
             longString1 += pair.get(0).getValue().getChromosome().get(i);
             longString2 += pair.get(1).getValue().getChromosome().get(i);
         }
@@ -275,7 +268,8 @@ public class Algorithm {
         String subA1 = longString1.substring(0, n);
         String subB2 = longString2.substring(n, longString2.length());
 
-        String subB1 = longString2.substring(0, n);;
+        String subB1 = longString2.substring(0, n);
+        ;
         String subA2 = longString1.substring(n, longString1.length());
 
         String finalLongString1 = subA1.concat(subB2);
@@ -284,11 +278,11 @@ public class Algorithm {
         ArrayList<String> chromosomes1 = new ArrayList<String>();
         ArrayList<String> chromosomes2 = new ArrayList<String>();
 
-        for(int i=0; i < finalLongString1.length(); i = i + m){
+        for (int i = 0; i < finalLongString1.length(); i = i + m) {
             chromosomes1.add(finalLongString1.substring(i, Math.min(i + m, finalLongString1.length())));
         }
 
-        for(int i=0; i < finalLongString2.length(); i = i + m){
+        for (int i = 0; i < finalLongString2.length(); i = i + m) {
             chromosomes2.add(finalLongString2.substring(i, Math.min(i + m, finalLongString2.length())));
         }
 
@@ -332,84 +326,62 @@ public class Algorithm {
         return retPair;
     }
 
-//    public void mutation(HashMap<Integer, Individual> population){
-//        int number = (int) (N * pm);
-//
-//        for(int i=0 ; i<population.size(); i++){
-//            Random rg = new Random();
-//            int n = rg.nextInt(population.size());
-//
-//
-//        }
-//    }
-
-    public double averageFitness(HashMap<Integer, Individual> population){
+    public double averageFitness(HashMap<Integer, Individual> population) {
         double sum = 0;
-        for(int i=0; i<population.size(); i++){
+        for (int i = 0; i < population.size(); i++) {
             sum += population.get(i).getFitness();
         }
         return sum / population.size();
     }
 
-    public ArrayList<Individual> getSeeds(HashMap<Integer, Individual> population){
+    public ArrayList<Individual> getSeeds(HashMap<Integer, Individual> population) {
         ArrayList<Individual> returnArray = new ArrayList<Individual>();
         ArrayList<Individual> populationArray = new ArrayList<Individual>(population.values());
         Collections.sort(populationArray);
-
         Individual first = populationArray.get(0);
         returnArray.add(first);
-
-        boolean found;
-
-        for (int i = 1; i < populationArray.size(); i++){
+        boolean isFound;
+        for (int i = 1; i < populationArray.size(); i++) {
+            isFound = false;
             int size = returnArray.size();
             Individual tempInd = populationArray.get(i);
-            found = false;
 
-            for (int j = 0; j < size; j++){
-                if(euclideanDistance(returnArray.get(j), tempInd) <= 0.03){
-                    found = true;
+            for (int j = 0; j < size; j++) {
+                if (euclideanDistance(returnArray.get(j), tempInd) <= 0.03) {
+                    isFound = true;
                     break;
                 }
             }
-
-            if(!found)
+            if (!isFound) {
                 returnArray.add(tempInd);
+            }
 
         }
-
         return returnArray;
     }
 
-    public ArrayList<Individual> getGlobalMax (ArrayList<Individual> seeds){
+    public ArrayList<Individual> getGlobalMax(ArrayList<Individual> seeds) {
         ArrayList<Individual> returnArray = new ArrayList<Individual>();
-
-
-        for (int i = 0; i<seeds.size(); i++){
+        for (int i = 0; i < seeds.size(); i++) {
             boolean checker = true;
             ArrayList<Double> arr2 = new ArrayList<>();
-
-            for (int j = 0; j<dimension; j++){
+            for (int j = 0; j < dimension; j++) {
                 final double tempX = seeds.get(i).getPhenotype().get(j);
                 double temp = 0;
-
-                for (int h=0; h<function.getGlobalMax().length; h++){
-                    if(Math.abs(function.getGlobalMax()[h] - tempX) <= 0.01){
+                for (int h = 0; h < function.getGlobalMax().length; h++) {
+                    if (Math.abs(function.getGlobalMax()[h] - tempX) <= 0.01) {
                         temp = function.getGlobalMax()[h];
                     }
                 }
-
-                if(temp != 0)
+                if (temp != 0) {
                     arr2.add(temp);
-                else{
+                } else {
                     checker = false;
                     break;
                 }
-
             }
-
-            if(checker)
-                if(euclideanDistance(seeds.get(i).getPhenotype(), arr2) <= 0.03){
+            if (checker)
+                if (euclideanDistance(seeds.get(i).getPhenotype(), arr2) <= 0.03) {
                     returnArray.add(seeds.get(i));
                 }
         }
@@ -417,40 +389,34 @@ public class Algorithm {
         return returnArray;
     }
 
-    public ArrayList<Individual> getLocalMax (ArrayList<Individual> seeds){
+    public ArrayList<Individual> getLocalMax(ArrayList<Individual> seeds) {
         ArrayList<Individual> returnArray = new ArrayList<Individual>();
-
-
-        for (int i = 0; i<seeds.size(); i++){
+        for (int i = 0; i < seeds.size(); i++) {
             boolean checker = true;
             ArrayList<Double> arr2 = new ArrayList<>();
-
-            for (int j = 0; j<dimension; j++){
+            for (int j = 0; j < dimension; j++) {
                 final double tempX = seeds.get(i).getPhenotype().get(j);
                 double temp = 0;
-
-                for (int h=0; h<function.getLocalMax().length; h++){
-                    if(Math.abs(function.getLocalMax()[h] - tempX) <= 0.01){
+                for (int h = 0; h < function.getLocalMax().length; h++) {
+                    if (Math.abs(function.getLocalMax()[h] - tempX) <= 0.01) {
                         temp = function.getLocalMax()[h];
                     }
                 }
-
-                if(temp != 0)
+                if (temp != 0) {
                     arr2.add(temp);
-                else{
+                } else {
                     checker = false;
                     break;
                 }
-
+            }
+            if (checker && euclideanDistance(seeds.get(i).getPhenotype(), arr2) <= 0.03) {
+                returnArray.add(seeds.get(i));
             }
 
-            if(checker)
-                if(euclideanDistance(seeds.get(i).getPhenotype(), arr2) <= 0.03){
-                    returnArray.add(seeds.get(i));
-                }
         }
 
         return returnArray;
     }
+
 
 }

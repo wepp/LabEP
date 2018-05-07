@@ -1,4 +1,4 @@
-import interfaces.IFunction;
+import functions.IFunction;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.Plot3DPanel;
 
@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 public class Graphic {
 
-    private int bound = 1000;
-    private double step = 0.001;
+    private int bound = 1401;
+    private double step = 0.01;
     private IFunction function;
     private ArrayList<Individual> seeds;
     private double[] x;
@@ -42,7 +42,7 @@ public class Graphic {
 
             int j=0;
 
-            for (double i = 0; i < 1; i+=step, j++){
+            for (double i = -7; i < 7; i+=step, j++){
                 x[j] = i;
                 ArrayList<Double> tempList = new ArrayList<Double>();
                 tempList.add(x[j]);

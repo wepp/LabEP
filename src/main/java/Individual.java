@@ -1,4 +1,4 @@
-import interfaces.IFunction;
+import functions.IFunction;
 
 import java.util.ArrayList;
 import java.util.Random;
