@@ -1,8 +1,8 @@
 import functions.*;
 import interfaces.IFunction;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import utils.ExcelWriter;
-import utils.Statistics;
+import tools.ExcelWriter;
+import tools.Statistics;
 
 import java.io.IOException;
 import java.util.ArrayList;
